@@ -1,28 +1,16 @@
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
+from common_tools import *
+
 #                    68.27%    90%    95%
 #chi2_critical_2DF = [2.2958, 4.605, 5.991]
 chi2_critical_2DF = [2.2958, 5.991]
 
-def readContourMap(fname) :
-    i_var = []
-    j_var = []
-    val = []
-    with open(fname, "r") as f :
-        for line in f :
-            split = line.split()
-            if split[0] != "CONTOURPOINT" :
-                continue
-            i_var.append(float(split[1]))
-            j_var.append(float(split[2]))
-            val.append(float(split[3]))
-    return i_var, j_var, val
-
 def plotContour(fname, **kwargs) :
-    x, y, chi2 = readContourMap(fname)
+    x, y, chi2, x_true, y_true = readContourMap(fname)
     plt.tricontour(x, y, chi2, levels = [min(chi2)+critical_value for critical_value in chi2_critical_2DF], **kwargs)
-
+    plt.scatter([x_true], [y_true], color = 'k', marker = '*')
 
 if __name__ == "__main__" :
 

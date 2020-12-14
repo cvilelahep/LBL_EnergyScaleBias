@@ -13,8 +13,10 @@ int main(int argc, char ** argv){
   enum projection this_projection;
   bool this_profile;
   double this_e_shift;
+
+  double delta_cp_override = -1000;
   
-  if (argc == 4){
+  if (argc >= 4){
 
     if (strcmp(argv[1], "dcp_th13") == 0) this_projection = dcp_th13;
     else if (strcmp(argv[1], "sinsqth23_dmsq32") == 0) this_projection = sinsqth23_dmsq32;
@@ -31,12 +33,15 @@ int main(int argc, char ** argv){
     }
 
     this_e_shift = atof(argv[3]);
+
+    if (argc >=5) delta_cp_override = atof(argv[4]);
     
   } else {
-    printf("Usage: erec_bias_dune PROJECTION PROFILE E_SHIFT\n");
+    printf("Usage: erec_bias_dune PROJECTION PROFILE E_SHIFT [deltacp]\n");
     printf("PROJECTION: dcp_th13 or sinsqth23_dmsq32\n");
     printf("PROFILE: 1 to profile over other oscillation parameters, 0 to fix at true value\n");
     printf("E_SHIFT: fractional energy bias\n");
+    printf("deltacp: value of deltacp, optional\n");
     return -1;
   }
 
@@ -56,10 +61,13 @@ int main(int argc, char ** argv){
   double theta12 = 0.5836;
   double theta13 = 0.1496;
   double theta23 = 0.8587;
-  double deltacp = 3.438;
+  //double deltacp = 3.438; // nu-fit 5.0
+  double deltacp = 1.396; // Missing energy paper
   double sdm = 7.42e-5;
   double ldm = 2.517e-3;
 
+  if (delta_cp_override > -999) deltacp = delta_cp_override;
+  
   // Contour grid
   /* Scan the th13-delta plane */
   double th13_lower  = 0.1387;
@@ -114,7 +122,8 @@ int main(int argc, char ** argv){
 			GLB_FIXED,GLB_FREE,GLB_FIXED,
 			GLB_FREE,GLB_FIXED,GLB_FIXED);
   }
-  
+
+  //                                             NOT SURE WHAT THIS DOES, but doesn't seem to affect contours. CHECK!
   glbSetDensityProjectionFlag(globes_projection, GLB_FIXED, GLB_ALL);
   glbSetProjection(globes_projection);  
   
@@ -140,16 +149,18 @@ int main(int argc, char ** argv){
     ymin, ymax, ysteps;
 
   if (this_projection == dcp_th13) {
-    xvar = GLB_DELTA_CP;
-    yvar = GLB_THETA_13;
+    xvar = GLB_THETA_13;
+    yvar = GLB_DELTA_CP;
 
-    xmin = delta_lower;
-    xmax = delta_upper;
-    xsteps = delta_steps;
-    
-    ymin = th13_lower;
-    ymax = th13_upper;
-    ysteps = th13_steps;
+    xmin = th13_lower;
+    xmax = th13_upper;
+    xsteps = th13_steps;
+
+    ymin = delta_lower;
+    ymax = delta_upper;
+    ysteps = delta_steps;
+
+    printf("TRUEVALUES %f %f\n", theta13, deltacp);
   } else if (this_projection == sinsqth23_dmsq32) {
     xvar = GLB_THETA_23;
     yvar = GLB_DM_31;
@@ -161,6 +172,8 @@ int main(int argc, char ** argv){
     ymin = ldm_lower;
     ymax = ldm_upper;
     ysteps = ldm_steps;
+
+    printf("TRUEVALUES %f %f\n", theta23, ldm);
   }
   
   double this_x, this_y;
