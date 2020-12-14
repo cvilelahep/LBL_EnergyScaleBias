@@ -64,19 +64,19 @@ int main(int argc, char ** argv){
   /* Scan the th13-delta plane */
   double th13_lower  = 0.1387;
   double th13_upper  = 0.1650;
-  double th13_steps  = 20;
+  double th13_steps  = 50;
 
   double delta_lower = 0;
   double delta_upper = 6.2832;
-  double delta_steps = 20;
+  double delta_steps = 50;
 
   double th23_lower  = 0.6331;
   double th23_upper  = 0.9377;
-  double th23_steps  = 20;
+  double th23_steps  = 50;
 
   double ldm_lower = 2.35e-3;
   double ldm_upper = 2.55e-3;
-  double ldm_steps = 20;
+  double ldm_steps = 50;
   
   /* Define "true" oscillation parameter vector */
   glb_params true_values = glbAllocParams();
