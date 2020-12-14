@@ -27,8 +27,8 @@ def plotContour(fname, **kwargs) :
 if __name__ == "__main__" :
 
     legend_entries = [Line2D([0], [0], color='k', ls='solid', label="Unbiased"),
-                      Line2D([0], [0], color='k', ls='dashed', label="10% energy scale biased, other osc. pars. profiled"),
-                      Line2D([0], [0], color='k', ls='dotted', label="10% energy scale biased, other osc. pars. fixed")]
+                      Line2D([0], [0], color='k', ls='dashed', label="10% energy scale bias, other osc. pars. profiled"),
+                      Line2D([0], [0], color='k', ls='dotted', label="10% energy scale bias, other osc. pars. fixed")]
     
     figApp = plt.figure()
     plotContour("globes_out/contour_dcp_th13_Profile_1_bias_0.0.dat", linestyles = 'solid')
@@ -38,6 +38,7 @@ if __name__ == "__main__" :
     plt.legend(handles = legend_entries)
     plt.xlabel(r"$\theta_{13}$")
     plt.ylabel(r"$\delta_{CP}$")
+    plt.tight_layout()
     figApp.savefig("plots_out/globes_erec_bias_dune_appearance.png")
     figApp.savefig("plots_out/globes_erec_bias_dune_appearance.pdf")
 
@@ -50,6 +51,7 @@ if __name__ == "__main__" :
     plt.xlabel(r"$\theta_{23}$")
     plt.ylabel(r"$\Delta m^{2}_{Atm}$ [$eV^{2}$]")
     plt.ylim((0.00235, 0.0026))
+    plt.tight_layout()
     figDisapp.savefig("plots_out/globes_erec_bias_dune_disappearance.png")
     figDisapp.savefig("plots_out/globes_erec_bias_dune_disappearance.pdf")
     
